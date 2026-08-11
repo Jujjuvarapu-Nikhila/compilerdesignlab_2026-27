@@ -54,32 +54,32 @@ class Function:
         return self.tripleTACstmts.render()
 
     def compile(self):
+        self.localSymbolTable.assignOffsetsToSymbols()
+        mips_gen = MIPSGenerator(self.localSymbolTable)
+        frame_size = self.localSymbolTable.size()
+        self.mipsCode = mips_gen.generate(
+                self.tripleTACstmts.triples,
+                frame_size
+                )
         """
         TODO(week-4): produce this function's complete MIPS assembly and
-        store it in self.mipsCode. Steps, in order:
-
-          1. self.localSymbolTable.assignOffsetsToSymbols()
-             -- already-implemented SymbolTable method (see
-             SymbolTable.py). Assigns each declared local a real $fp
-             offset (0, 4, 8, ... in declaration order) -- this MUST run
-             before step 2, since MIPSGenerator needs those offsets to
-             emit correct lw/sw instructions.
-
-          2. mips_gen = MIPSGenerator(self.localSymbolTable)
-             frame_size = self.localSymbolTable.size()
-             self.mipsCode = mips_gen.generate(self.tripleTACstmts.triples, frame_size)
-             -- MIPSGenerator.generate() (tac_to_mips.py) is responsible
-             for emitting the prologue, walking every triple to produce
-             the function body, and emitting the epilogue, then
-             returning the fully rendered text.
+        store it in self.mipsCode. Steps, in order:1.
+        -- already-implemented SymbolTable method (see
+        SymbolTable.py). Assigns each declared local a real $fp
+        offset (0, 4, 8, ... in declaration order) -- this MUST run
+        before step 2, since MIPSGenerator needs those offsets to
+        emit correct lw/sw instructions.
+        -- MIPSGenerator.generate() (tac_to_mips.py) is responsible
+        for emitting the prologue, walking every triple to produce
+        the function body, and emitting the epilogue, then
+        returning the fully rendered text.
 
         Assumes self.tripleTACstmts has already been populated -- i.e.
         generateTripleTAC() has already run. (Program.compile() does NOT
         call generateTripleTAC() for you -- see main.py's write_compile()
         for the required call order: parse -> program.generateTripleTAC()
         -> program.compile().)
-        """
-        raise NotImplementedError("implement Function.compile()")
+        raise NotImplementedError("implement Function.compile()")"""
 
     def getMipsCode(self):
         """NEW this week. Returns None if compile() hasn't run yet."""
